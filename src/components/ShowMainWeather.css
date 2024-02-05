@@ -1,0 +1,18 @@
+/* ShowMainWeather.css */
+.back {
+  background-image: url("../assets/Cloud-background.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: absolute;
+  width: 100%;
+  height: 200px;
+
+  z-index: 1;
+  opacity: 0.2;
+  zoom: 1.6;
+}
+
+.grande {
+  zoom: 1.5;
+}
