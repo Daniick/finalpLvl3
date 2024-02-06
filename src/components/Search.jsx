@@ -1,55 +1,44 @@
-import React, { useState, useEffect } from "react";
+// Search.js
+import React, { useState } from "react";
+import { useWeather } from "../context/WeatherContext";
+import { IconSearch } from "@tabler/icons-react";
 
 const Search = ({ onCitySelect }) => {
+  // Recibe onCitySelect como prop
+  const { suggestions, fetchCitySuggestions, fetchWeatherDetails } =
+    useWeather();
   const [searchTerm, setSearchTerm] = useState("");
-  const [suggestions, setSuggestions] = useState([]);
 
-  useEffect(() => {
-    const fetchSuggestions = async () => {
-      try {
-        const apiKey = "59459b057f725229a7b8409b77108a00";
-        const apiUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${searchTerm}&limit=5&appid=${apiKey}`;
+  const handleInputChange = (event) => {
+    const value = event.target.value;
+    setSearchTerm(value);
+    fetchCitySuggestions(value);
+  };
 
-        const response = await fetch(apiUrl);
-        const data = await response.json();
-
-        const cities = data.map((city) => ({
-          id: city.id,
-          name: city.name,
-          country: city.country,
-        }));
-
-        setSuggestions(cities);
-      } catch (error) {
-        console.error("Error fetching city suggestions:", error);
-        setSuggestions([]);
-      }
-    };
-
-    if (searchTerm.length > 0) {
-      fetchSuggestions();
-    } else {
-      setSuggestions([]);
-    }
-  }, [searchTerm]);
-
-  const handleSelect = (city) => {
-    onCitySelect(city);
+  const handleSelect = async (city) => {
+    await fetchWeatherDetails(city);
     setSearchTerm("");
-    setSuggestions([]);
+    onCitySelect(city); // Llama a onCitySelect cuando se selecciona una ciudad
   };
 
   return (
-    <div>
+    <div className="mt-10 ml-5 relative ">
+      <IconSearch className="absolute left-3 top-2 text-gray-400" />
       <input
         type="text"
         value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
+        onChange={handleInputChange}
         placeholder="Search for cities..."
+        className="pl-10 w-[330px] bg-[#1E213A] p-2 text-white border max-sm:w-[270px] "
       />
-      <ul>
+      <button className="ml-5 bg-blue-600 text-white p-2 px-5">Search</button>
+      <ul className="mt-12 text-white">
         {suggestions.map((city) => (
-          <li key={city.id} onClick={() => handleSelect(city)}>
+          <li
+            className="w-[439px] hover:border h-8 pl-2 cursor-pointer items-center pb-10 pt-5 mt-8 max-sm:w-[380px]"
+            key={city.id}
+            onClick={() => handleSelect(city)}
+          >
             {city.name}, {city.country}
           </li>
         ))}
