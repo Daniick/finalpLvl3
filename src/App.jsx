@@ -6,7 +6,7 @@ import ShowMainWeather from "./components/ShowMainWeather";
 function App() {
   return (
     <WeatherProvider>
-      <section className="sm:flex ">
+      <section className="sm:flex">
         <ShowMainWeather />
         <DaysWeather />
       </section>
