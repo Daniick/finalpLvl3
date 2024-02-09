@@ -101,7 +101,7 @@ export const WeatherProvider = ({ children }) => {
       const forecastApiUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city.name},${city.country}&appid=${apiKey}&units=metric`;
       const forecastResponse = await fetch(forecastApiUrl);
       const forecastData = await forecastResponse.json();
-      console.log(forecastData);
+
       const nextDaysForecast = forecastData.list.map((item) => ({
         date: new Date(item.dt * 1000),
         temperature: {
